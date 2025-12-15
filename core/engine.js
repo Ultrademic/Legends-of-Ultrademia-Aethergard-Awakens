@@ -9,6 +9,7 @@ import { updateEffects } from "../modules/combat/projectiles.js";
 import { updateNameplates } from "../modules/ui/nameplates.js";
 import { updateHealthbars } from "../modules/ui/healthbars.js";
 import { updateFloatingText } from "../modules/ui/floating_text.js";
+import { updateTargeting } from "../modules/combat/targeting.js";
 
 import { CombatCore } from "../modules/combat/combat_core.js";
 import { player } from "../modules/characters/player.js";
@@ -35,6 +36,7 @@ function loop(time) {
     CombatCore.updateCombatDistance();
     updateMonsterAI(dt);
     updateCombat(dt);
+    updateTargeting(dt); // Updates the 3D selection ring
     player.update(dt);
     updateCamera(dt);
     updateEffects(dt);

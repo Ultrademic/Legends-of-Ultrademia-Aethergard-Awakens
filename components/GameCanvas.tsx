@@ -34,14 +34,6 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ race, playerClass }) => 
 
         console.log(`[GameCanvas] Initializing for race: ${race}, class: ${playerClass}`);
         
-        // Ensure archetype is derived correctly if playerClass string is passed directly
-        // We assume App.tsx passes the localized string, but spawn needs 'fighter'/'mystic'
-        // Ideally we pass that prop, but for now we rely on player internal state handling or refetching
-        // Since player.spawn(race, archetype) is how we call it in App.tsx BEFORE mounting,
-        // we might actually be double-initializing. 
-        // Ideally App.tsx calls spawn, then mounts this. 
-        // But since this mounts, let's just ensure the zone loads.
-        
         await loadZone("village");
         startEngine();
       } catch (err) {

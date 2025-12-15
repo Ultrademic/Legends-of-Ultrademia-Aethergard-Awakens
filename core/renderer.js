@@ -25,14 +25,10 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 0.8;
 
-// REMOVED: document.body.appendChild(renderer.domElement);
-// React GameCanvas component handles the DOM placement.
-
 window.scene = scene;
 window.camera = camera;
 window.renderer = renderer;
 
-// LIGHTING
 const ambientLight = new THREE.AmbientLight(0x404060, 0.6);
 scene.add(ambientLight);
 
@@ -42,7 +38,6 @@ sunLight.castShadow = true;
 sunLight.shadow.mapSize.set(2048, 2048);
 scene.add(sunLight);
 
-// PARTICLES
 const particleCount = 4000;
 const geom = new THREE.BufferGeometry();
 const pos = new Float32Array(particleCount * 3);
@@ -80,7 +75,10 @@ window.addEventListener("resize", () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-console.log("%c[Renderer] Aethergard renderer initialized.", "color:cyan");
+console.log(
+  "%c[Renderer] Aethergard renderer initialized — the void glows cyan",
+  "color:cyan;font-weight:bold;font-size:16px"
+);
 
 export function renderFrame() {
     renderer.render(scene, camera);

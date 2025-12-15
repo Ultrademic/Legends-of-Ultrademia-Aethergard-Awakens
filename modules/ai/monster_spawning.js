@@ -16,6 +16,7 @@ export async function spawnMonster(config, x, z) {
         const mob = {
             name: config.name,
             family: config.family || "wolf",
+            config: config, // Store config for respawn reference
             level: config.level,
             hp: config.maxHp,
             maxHp: config.maxHp,
@@ -64,4 +65,35 @@ export async function spawnMonster(config, x, z) {
         console.error("Spawn Failed:", err);
         return null;
     }
+}
+
+export function scheduleRespawn(mob, delayMs = 10000) {
+    setTimeout(() => {
+        if (!mob.model) return;
+
+        console.log(`%c[Respawn] ${mob.name} returns to the world.`, "color:violet");
+
+        // Reset Stats
+        mob.hp = mob.maxHp;
+        mob.dead = false;
+        mob.inCombat = false;
+        mob.target = null;
+        mob._canAttack = true;
+
+        // Reset Position
+        mob.position.set(mob.homeX, 0, mob.homeZ);
+        mob.model.position.y = 0; // Ensure it's not underground
+        
+        // Reset Animation
+        if (mob.animSM) mob.animSM.setState("idle");
+
+        // Ensure visible
+        mob.model.visible = true;
+        
+        // Add back to scene if it was removed (though we usually just hide it)
+        if (!scene.children.includes(mob.model)) {
+            scene.add(mob.model);
+        }
+
+    }, delayMs);
 }

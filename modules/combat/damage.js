@@ -4,6 +4,7 @@ import { XPSystem } from "../progression/xp_system.js";
 import { updateQuestProgress } from "../progression/starter_zone_quests.js";
 import { spawnFloatingText } from "../ui/floating_text.js";
 import { spawnHitEffect } from "./projectiles.js";
+import { scheduleRespawn } from "../ai/monster_spawning.js";
 
 export let lastAttackTime = 0;
 const ATTACK_COOLDOWN = 0.9;
@@ -106,9 +107,15 @@ function handleMobDeath(mob) {
         }
     });
 
+    // Hide monster and schedule respawn
     mob.position.y = -999; 
-    mob.dead = true;       
+    mob.dead = true;
+    
+    // Stop any AI intervals
     if (mob._interval) clearInterval(mob._interval);
+
+    // Schedule Respawn (e.g. 8 seconds)
+    scheduleRespawn(mob, 8000);
 }
 
 export function monsterAttackPlayer(mob) {
@@ -117,11 +124,16 @@ export function monsterAttackPlayer(mob) {
     let damage = Math.floor((pAtk / pDef) * (player.gradeScale || 1.0));
     damage += Math.floor(Math.random() * 4) - 1;
     player.takeDamage(damage);
+    
     spawnFloatingText(player.group, damage, 'crit'); 
+    
+    // Blood effect
     setTimeout(() => {
         spawnHitEffect(player.group.position, 'blood');
     }, 200);
+
     player.dispatchMessage('combat', `${mob.name} hit you for ${damage} damage.`);
+    
     if (player.hp <= 0) {
         CombatCore.exitCombat();
         player.dispatchMessage('error', `You have been slain by ${mob.name}!`);
