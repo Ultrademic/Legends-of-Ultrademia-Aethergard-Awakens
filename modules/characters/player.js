@@ -1,4 +1,3 @@
-
 import * as THREE from "three";
 import { scene as importedScene } from "../../core/renderer.js";
 import { loadPlayerModel } from "../animation/anim_loader.js";

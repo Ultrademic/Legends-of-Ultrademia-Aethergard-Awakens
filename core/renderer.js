@@ -1,16 +1,9 @@
-
 import * as THREE from "three";
 
-// ─────────────────────────────────────────────
-// SCENE
-// ─────────────────────────────────────────────
 export const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x00000a);
 scene.fog = new THREE.FogExp2(0x00000a, 0.0008);
 
-// ─────────────────────────────────────────────
-// CAMERA
-// ─────────────────────────────────────────────
 export const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
@@ -19,9 +12,6 @@ export const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 1.6, 5);
 
-// ─────────────────────────────────────────────
-// RENDERER
-// ─────────────────────────────────────────────
 export const renderer = new THREE.WebGLRenderer({
   antialias: true,
   powerPreference: "high-performance"
@@ -36,16 +26,13 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 0.8;
 
 // REMOVED: document.body.appendChild(renderer.domElement);
-// The React GameCanvas component will append this element to the correct div.
+// React GameCanvas component handles the DOM placement.
 
-// Optional but helpful: global fallbacks for older modules
 window.scene = scene;
 window.camera = camera;
 window.renderer = renderer;
 
-// ─────────────────────────────────────────────
-// LIGHTING — ULTRADEMIC AESTHETIC
-// ─────────────────────────────────────────────
+// LIGHTING
 const ambientLight = new THREE.AmbientLight(0x404060, 0.6);
 scene.add(ambientLight);
 
@@ -55,9 +42,7 @@ sunLight.castShadow = true;
 sunLight.shadow.mapSize.set(2048, 2048);
 scene.add(sunLight);
 
-// ─────────────────────────────────────────────
-// PARTICLES — AETHER-FLOW VISUAL FX
-// ─────────────────────────────────────────────
+// PARTICLES
 const particleCount = 4000;
 const geom = new THREE.BufferGeometry();
 const pos = new Float32Array(particleCount * 3);
@@ -83,23 +68,20 @@ const particles = new THREE.Points(
 
 scene.add(particles);
 
-// Subtle rotation
 function drift() {
   particles.rotation.y += 0.00008;
   requestAnimationFrame(drift);
 }
 drift();
 
-// ─────────────────────────────────────────────
-// RESIZE HANDLER
-// ─────────────────────────────────────────────
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-console.log(
-  "%c[Renderer] Aethergard renderer initialized — the void glows cyan",
-  "color:cyan;font-weight:bold;font-size:16px"
-);
+console.log("%c[Renderer] Aethergard renderer initialized.", "color:cyan");
+
+export function renderFrame() {
+    renderer.render(scene, camera);
+}

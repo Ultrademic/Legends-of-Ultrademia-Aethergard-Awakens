@@ -1,4 +1,3 @@
-
 import * as THREE from "three";
 import { camera } from "./renderer.js";
 import { player } from "../modules/characters/player.js";
