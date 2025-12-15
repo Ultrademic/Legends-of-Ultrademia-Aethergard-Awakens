@@ -1,0 +1,52 @@
+1. HUMAN CHARACTER PROMPT (Ultrademian Human)
+
+Meshy Prompt:
+
+"Stylized fantasy MMO human adventurer, Ultrademic aesthetic. Slim athletic proportions, readable silhouette. Neutral A-pose, rig-friendly. Soft hand-painted textures in warm tones (pale skin, brown or blonde hair). Light wooden medium armor: simple chestplate, leather bracers, cloth tunic. No weapons attached. Final model should be ~6 heads tall, medium-sized boots, simplified face with expressive eyes. Stylized proportions similar to Lineage II + Genshin Impact hybrid. Clean topology, optimized loops for joints. Fantasy RPG vibe. No cape."
+
+⭐ 2. ELF CHARACTER PROMPT (Light Elf / Roinne Line)
+
+Meshy Prompt:
+
+"Elegant high fantasy light elf inspired by Lineage II elves, Ultrademic aesthetic. Long ears, tall slender physique, graceful posture. Neutral A-pose. Pale glowing skin, silver-blonde hair. Light cloth armor: layered tunic, elegant shoulder straps, magical runic patterns. Soft pastel color palette: cyan, white, silver. No weapons. Stylized MMO proportions (long legs, slim waist). Soft hand-painted shader style. Clean topology with well-defined joint loops. Designed for animation."
+
+⭐ 3. DARK ELF CHARACTER PROMPT (Shadowborn Line)
+
+Meshy Prompt:
+
+"Dark elf warrior-mage, stylized MMO style. Slim athletic frame, tall, long pointed ears. Neutral A-pose. Rich deep skin tones (dark blue/purple/ashen). White or silver hair. Armor style: dark cloth + leather, asymmetrical straps, subtle glowing magical accents in violet or teal. Slightly more angular features than light elf. Eyes with faint glow. No weapons attached. Clean stylized textures, hand-painted look. Rig-friendly topology for animations. Ultrademic fantasy vibe."
+
+⭐ 4. OPTIONAL VARIANTS
+✔ Female Variant Toggle
+
+Add:
+
+"female variant, softer facial features, light stylization"
+
+✔ Male Variant Toggle
+
+Add:
+
+"male variant, slightly broader shoulders"
+
+✔ Caster Armor Variant
+
+"cloth caster armor variant: long tunic, belts, magical runes, flowing fabric, no cape"
+
+✔ Rogue/Archer Variant
+
+"light leather archer armor variant: fitted plates, armguards, thigh straps, simplified quiver holder (no arrows attached)"
+
+✔ Heavy Armor (future)
+
+For humans or dark elves:
+
+"medium wooden armor set, stylized MMO design, simple chestplate, layered shoulder pads, brown leather straps, readable shapes"
+
+⭐ 5. ANIMATION-FRIENDLY REQUIREMENTS (IMPORTANT)
+
+Add these lines to every character prompt:
+
+"Neutral A-pose (not T-pose). Feet flat and parallel. Fingers slightly spread, relaxed pose. Clean topology optimized for joints, no extreme details. Even quad distribution. Avoid accessories that break weight painting. No weapons or rigid ornaments. Model scale around 1.8m tall. Facial topology suitable for basic expressions."
+
+These instructions ensure Meshy gives you a clean, game-ready humanoid skeleton.

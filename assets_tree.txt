@@ -1,0 +1,49 @@
+/assets/
+    /models/
+        /races/
+            human/
+                human.glb
+                human_idle.glb
+                human_run.glb
+                human_attack.glb
+                human_hit.glb
+                human_death.glb
+
+            elf/
+                elf.glb
+                elf_idle.glb
+                elf_run.glb
+                elf_attack.glb
+                elf_hit.glb
+                elf_death.glb
+
+            darkelf/
+                darkelf.glb
+                darkelf_idle.glb
+                darkelf_run.glb
+                darkelf_attack.glb
+                darkelf_hit.glb
+                darkelf_death.glb
+
+        /monsters/
+            wolf/
+                wolf.glb
+                wolf_idle.glb
+                wolf_walk.glb
+                wolf_attack.glb
+                wolf_death.glb
+
+            spider/
+                spider.glb
+                spider_idle.glb
+                spider_walk.glb
+                spider_attack.glb
+                spider_death.glb
+
+            goblin/
+                goblin.glb
+                goblin_idle.glb
+                goblin_run.glb
+                goblin_attack.glb
+                goblin_hit.glb
+                goblin_death.glb

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Legends of Ultrademia: Aethergard Awakens</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { margin:0; overflow:hidden; background:#000; cursor:none; }
+  canvas { display:block; }
+  #fade { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; opacity:0; pointer-events:none; transition:opacity 1.2s; z-index:9999; }
+</style>
+</head>
+<body>
+<div id="fade"></div>
+
+<script type="module">
+import * as THREE from 'three';
+
+const ascii = `
+   ╔═ LEGENDS OF ULTRADEMIA ═╗
+   ║                         ║
+   ║     AETHERGARD          ║
+   ║       AWAKENS           ║
+   ║                         ║
+   ║       v0.6.6-α          ║
+   ║                         ║
+   ║   ► PRESS ANY KEY ◄     ║
+   ╚═════════════════════════╝
+`;
+
+// Scene
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x00000a);
+const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 1000);
+camera.position.z = 8;
+
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(devicePixelRatio);
+document.body.appendChild(renderer.domElement);
+
+// Glowing text
+const canvas = document.createElement('canvas');
+canvas.width = 2048; canvas.height = 2048;
+const ctx = canvas.getContext('2d');
+const texture = new THREE.CanvasTexture(canvas);
+const sprite = new THREE.Sprite(new THREE.SpriteMaterial({map: texture, transparent:true}));
+sprite.scale.set(16, 16, 1);
+scene.add(sprite);
+
+function drawText() {
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0,0,2048,2048);
+  ctx.font = '92px "Courier New", monospace';
+  ctx.textAlign = 'center';
+  ctx.shadowColor = '#00ffff';
+  ctx.shadowBlur = 120;
+  ascii.split('\n').forEach((line, i) => {
+    const y = 600 + i * 110;
+    ctx.strokeStyle = '#00ffff';
+    ctx.lineWidth = 8;
+    ctx.strokeText(line.trim(), 1024, y);
+    ctx.fillStyle = '#00ffff';
+    ctx.fillText(line.trim(), 1024, y);
+  });
+  texture.needsUpdate = true;
+}
+drawText();
+
+// Particles
+const geom = new THREE.BufferGeometry();
+const count = 8000;
+const pos = new Float32Array(count * 3);
+for(let i = 0; i < count * 3; i += 3) {
+  pos[i]   = (Math.random() - 0.5) * 50;
+  pos[i+1] = (Math.random() - 0.5) * 50;
+  pos[i+2] = (Math.random() - 0.5) * 50;
+}
+geom.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+const particles = new THREE.Points(geom, new THREE.PointsMaterial({
+  color: 0x00ffff, size: 0.15, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending
+}));
+scene.add(particles);
+
+// Audio — SAFE FOREVER
+let audioCtx = null;
+let osc = null;
+let gain = null;
+
+function initAudio() {
+  if (audioCtx) return;
+  audioCtx = new AudioContext();
+  osc = audioCtx.createOscillator();
+  osc.type = 'triangle';
+  osc.frequency.value = 55;
+  gain = audioCtx.createGain();
+  gain.gain.value = 0.01;
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start();
+}
+
+const safeStopAudio = () => {
+  try {
+    if (osc && osc.stop) osc.stop();
+  } catch(e) {}
+};
+
+const mouse = new THREE.Vector2();
+addEventListener('mousemove', e => {
+  initAudio();
+  mouse.x = (e.clientX / innerWidth) * 2 - 1;
+  mouse.y = -(e.clientY / innerHeight) * 2 + 1;
+  gain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.5);
+});
+
+// Animation
+let time = 0;
+function animate() {
+  requestAnimationFrame(animate);
+  time += 0.01;
+  sprite.position.y = Math.sin(time * 1.5) * 0.3;
+  particles.rotation.y = time * 0.02 + mouse.x * 0.4;
+  particles.rotation.x = time * 0.01 + mouse.y * 0.3;
+  renderer.render(scene, camera);
+}
+animate();
+
+// CHARACTER SELECT
+function showCharacterSelect() {
+  document.getElementById('fade').style.opacity = 1;
+
+  const ui = document.createElement('div');
+  ui.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at center,#02040a 0%,#000 65%);z-index:999;color:#cde7ff;font-family:system-ui,sans-serif;';
+  ui.innerHTML = `<div style="padding:40px;border-radius:20px;background:rgba(0,0,0,0.92);border:2px solid #3ba7ff;box-shadow:0 0 40px rgba(0,170,255,0.7);max-width:460px;text-align:center;">
+    <h1 style="margin:0 0 16px;font-size:32px;color:#3ba7ff;">Legends of Ultrademia</h1>
+    <p style="margin:0 0 32px;opacity:0.9;font-size:15px;">Choose your bloodline. The aether awaits.</p>
+    <div style="display:flex;gap:20px;justify-content:center;margin-bottom:32px;">
+      <button data-race="human" class="race-btn">Human</button>
+      <button data-race="elf" class="race-btn">Elf</button>
+      <button data-race="darkelf" class="race-btn">Dark Elf</button>
+    </div>
+    <div id="status" style="min-height:28px;margin-bottom:20px;font-size:14px;">Select a race to begin.</div>
+    <button id="enter" disabled style="padding:14px 40px;background:#1f7cff;color:white;border:none;border-radius:999px;font-size:18px;opacity:0.5;cursor:not-allowed;">Enter Ultrademia</button>
+  </div>`;
+  document.body.appendChild(ui);
+
+  const buttons = ui.querySelectorAll('.race-btn');
+  const enter = ui.querySelector('#enter');
+  const status = ui.querySelector('#status');
+  let chosen = null;
+
+  buttons.forEach(b => {
+    b.style.cssText = 'flex:1;padding:16px;background:#04101f;border:1px solid #3ba7ff;border-radius:12px;color:#cde7ff;font-size:14px;cursor:pointer;';
+    b.addEventListener('click', () => {
+      chosen = b.dataset.race;
+      buttons.forEach(x => x.style.background = '#04101f');
+      b.style.background = '#06233b';
+      b.style.boxShadow = '0 0 20px rgba(59,167,255,0.9)';
+      status.textContent = `Chosen: ${chosen[0].toUpperCase()}${chosen.slice(1)}`;
+      enter.disabled = false;
+      enter.style.opacity = '1';
+      enter.style.cursor = 'pointer';
+    });
+  });
+
+  enter.addEventListener('click', () => {
+    safeStopAudio();
+    document.getElementById('fade').style.opacity = 1;
+    setTimeout(() => {
+      location.href = `legacy.html?race=${chosen}`;
+    }, 800);
+  });
+}
+
+// START — SAFE AUDIO + NO GESTURE CONFLICT
+const start = () => {
+  initAudio();
+  safeStopAudio();
+
+  requestAnimationFrame(() => {
+    document.getElementById('fade').style.opacity = 1;
+    setTimeout(showCharacterSelect, 800);
+  });
+};
+
+addEventListener('click', start, {once:true});
+addEventListener('keydown', start, {once:true});
+addEventListener('touchstart', start, {once:true});
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>
